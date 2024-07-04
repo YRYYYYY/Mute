@@ -15,22 +15,22 @@ muted_users = {}
 @client.on(events.NewMessage(pattern='/mute'))
 async def mute(event):
     if event.sender_id in admin_ids:
-    user_id = event.sender_id
-    muted_users[user_id] = True
-    await event.respond('User muted successfully!')
+        user_id = event.sender_id
+        muted_users[user_id] = True
+        await event.respond('User muted successfully!')
 
 
 @client.on(events.NewMessage(pattern='/unmute'))
 async def unmute(event):
     if event.sender_id in admin_ids:
-    user_id = event.sender_id
-    if user_id in muted_users:
-        del muted_users[user_id]
-        await event.respond('User unmuted successfully!')
-    else:
-        await event.respond('User is not muted!')
+        user_id = event.sender_id
+        if user_id in muted_users:
+            del muted_users[user_id]
+            await event.respond('User unmuted successfully!')
+        else:
+            await event.respond('User is not muted!')
 
-uted users
+
 @client.on(events.NewMessage)
 async def delete_muted_messages(event):
     user_id = event.sender_id
@@ -38,8 +38,5 @@ async def delete_muted_messages(event):
         await event.delete()
 
 
-
-
 client.start()
 client.run_until_disconnected()
-
