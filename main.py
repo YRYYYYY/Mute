@@ -39,9 +39,10 @@ async def unmute(event):
 
 @client.on(events.NewMessage)
 async def delete_muted_messages(event):
-    user_id = event.sender_id
-    if user_id in muted_users:
-        await event.delete()
-
+    if event.is_group:
+        user_id = event.sender_id
+        if user_id in muted_users:
+            await event.delete()
+            
 client.start()
 client.run_until_disconnected()
