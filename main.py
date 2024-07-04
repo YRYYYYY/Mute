@@ -1,13 +1,11 @@
 import os
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-from telethon.sync import TelegramClient
-from telethon import events
 
-api_id = os.environ['API_ID']
+api_id = int(os.environ['API_ID'])
 api_hash = os.environ['API_HASH']
 session_string = os.environ['TELETHON_SESSION']
-admin_ids = [int(i.strip()) for i in os.environ['admins'].split(",")]
+admin_ids = [int(i.strip()) for i in os.environ['ADMINS'].split(",")]
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 users_to_delete_messages = {}
@@ -17,7 +15,6 @@ async def delete_user_message(event):
     if event.sender_id in users_to_delete_messages:
         user_id = event.sender_id
         await event.delete()
-        
 
 @client.on(events.NewMessage(chats=events.ChatAction(), pattern='/mute'))
 async def add_user_to_delete_list(event):
