@@ -5,40 +5,41 @@ from telethon.sessions import StringSession
 api_id = int(os.environ['API_ID'])
 api_hash = os.environ['API_HASH']
 session_string = os.environ['TELETHON_SESSION']
-#admin_ids = [int(i.strip()) for i in os.environ['ADMINS'].split(",")]
-admin_ids = [1008961594,1008981594]
+admin_ids = [int(i.strip()) for i in os.environ['ADMINS'].split(",")]
+#admin_ids = [1008961594,1008981594]
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
-users_to_delete_messages = {}
+muted_users = {}
 
-@client.on(events.NewMessage())
-async def delete_user_message(event):
-    if event.is_group and event.sender_id in users_to_delete_messages:
-        user_id = event.sender_id
-        await event.delete()
-        
 
 @client.on(events.NewMessage(pattern='/mute'))
-async def add_user_to_delete_list(event):
+async def mute(event):
     if event.sender_id in admin_ids:
-        if event.is_private and event.is_reply:
-            replied_message = await event.get_reply_message()
-            user_id = replied_message.sender_id
-            users_to_delete_messages[user_id] = True
-            await event.reply(f"User {user_id} has been muted in this chat.")
+    user_id = event.sender_id
+    muted_users[user_id] = True
+    await event.respond('User muted successfully!')
+
 
 @client.on(events.NewMessage(pattern='/unmute'))
-async def remove_user_from_delete_list(event):
+async def unmute(event):
     if event.sender_id in admin_ids:
-        if event.is_private and event.is_reply:
-            replied_message = await event.get_reply_message()
-            user_id = replied_message.sender_id
-            if user_id in users_to_delete_messages:
-                del users_to_delete_messages[user_id]
-                await event.reply(f"User {user_id} has been unmuted in this chat.")
-            else:
-                await event.reply("User is not in delete list.")
+    user_id = event.sender_id
+    if user_id in muted_users:
+        del muted_users[user_id]
+        await event.respond('User unmuted successfully!')
+    else:
+        await event.respond('User is not muted!')
+
+uted users
+@client.on(events.NewMessage)
+async def delete_muted_messages(event):
+    user_id = event.sender_id
+    if user_id in muted_users:
+        await event.delete()
+
+
+
 
 client.start()
 client.run_until_disconnected()
-print(True)
+
