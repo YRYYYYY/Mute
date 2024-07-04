@@ -27,8 +27,7 @@ async def unmute_user(event):
             replied_message = await event.get_reply_message()
             user_id_to_unmute = replied_message.sender_id
            
-            await event.reply(f"User {user_id_to_mute} has been unmuted in this chat.")
-
+            await event.reply(f"User {user_id_to_unmute} has been unmuted in this chat.")
 
 client.start()
 client.run_until_disconnected()
