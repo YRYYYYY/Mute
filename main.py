@@ -40,3 +40,4 @@ async def remove_user_from_delete_list(event):
 
 client.start()
 client.run_until_disconnected()
+print(True)
