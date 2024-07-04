@@ -18,7 +18,7 @@ async def mute(event):
             replied_msg = await event.get_reply_message()
             user_to_mute = replied_msg.sender_id
             muted_users[user_to_mute] = True
-            await event.respond('User muted successfully!')
+            await event.respond(f'User [uesr_to_mute] muted successfully!')
         else:
             await event.respond('Please reply to the user you want to mute.')
 
@@ -31,7 +31,7 @@ async def unmute(event):
             user_to_unmute = replied_msg.sender_id
             if user_to_unmute in muted_users:
                 del muted_users[user_to_unmute]
-                await event.respond('User unmuted successfully!')
+                await event.respond(f'User [user_to_unmute] unmuted successfully!')
             else:
                 await event.respond('User is not muted!')
         else:
