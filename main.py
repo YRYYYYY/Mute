@@ -4,7 +4,7 @@ from telethon import TelegramClient, events
 api_id = os.environ['API_ID']
 api_hash = os.environ['API_HASH']
 session_string = os.environ['TELETHON_SESSION']
-admin_ids = [int(i) for i in os.environ['admins'].split(",")]
+admin_ids = [int(i.strip()) for i in os.environ['admins'].split(",")]
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 @client.on(events.NewMessage(pattern='/mute'))
