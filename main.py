@@ -10,13 +10,14 @@ client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 users_to_delete_messages = {}
 
-@client.on(events.NewMessage(chats=events.ChatAction()))
+@client.on(events.NewMessage())
 async def delete_user_message(event):
-    if event.sender_id in users_to_delete_messages:
+    if event.is_group and event.sender_id in users_to_delete_messages:
         user_id = event.sender_id
         await event.delete()
+        
 
-@client.on(events.NewMessage(chats=events.ChatAction(), pattern='/mute'))
+@client.on(events.NewMessage(pattern='/mute'))
 async def add_user_to_delete_list(event):
     if event.sender_id in admin_ids:
         if event.is_private and event.is_reply:
@@ -25,7 +26,7 @@ async def add_user_to_delete_list(event):
             users_to_delete_messages[user_id] = True
             await event.reply(f"User {user_id} has been muted in this chat.")
 
-@client.on(events.NewMessage(chats=events.ChatAction(), pattern='/unmute'))
+@client.on(events.NewMessage(pattern='/unmute'))
 async def remove_user_from_delete_list(event):
     if event.sender_id in admin_ids:
         if event.is_private and event.is_reply:
